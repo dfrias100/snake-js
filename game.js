@@ -6,9 +6,9 @@ function drawBackground(context, width, height) {
     context.fillRect(0, 0, width, height);
 }
 
-function drawColoredSquare(context, x, y, width, height, color) {
+function drawColoredSquare(context, x, y, side_length, color) {
     context.fillStyle = color;
-    context.fillRect(x, y, width, height);
+    context.fillRect(x, y, side_length, side_length);
 }
 
 function resetBoard(context, board_array) {
@@ -33,7 +33,7 @@ function generateFood(context, board_array, apple) {
     apple.location.y = y;
     board_array[x][y] = ObjectTypes.FOOD;
     var screen_coords = logicalCoordsToScreenCoords(x, y);
-    drawColoredSquare(context, screen_coords.x + 1, screen_coords.y + 1, SQUARE_SIZE, SQUARE_SIZE, "red");
+    drawColoredSquare(context, screen_coords.x + 1, screen_coords.y + 1, SQUARE_SIZE, "red");
 }
 
 function generateSnakeStart(context, board_array, snake) {
@@ -50,7 +50,7 @@ function generateSnakeStart(context, board_array, snake) {
 
     board_array[x][y] = ObjectTypes.SNAKE;
     var screen_coords = logicalCoordsToScreenCoords(x, y);
-    drawColoredSquare(context, screen_coords.x + 1, screen_coords.y + 1, SQUARE_SIZE, SQUARE_SIZE, "white");
+    drawColoredSquare(context, screen_coords.x + 1, screen_coords.y + 1, SQUARE_SIZE, "white");
 }
 
 function computeNewCoords(logical_coordinates, direction) {
@@ -92,13 +92,13 @@ function drawState(context, snake, apple) {
     var snake_screen_coords = logicalCoordsToScreenCoords(snake.location.x, snake.location.y);
     var apple_screen_coords = logicalCoordsToScreenCoords(apple.location.x, apple.location.y);
 
-    drawColoredSquare(context, snake_screen_coords.x + 1, snake_screen_coords.y + 1, SQUARE_SIZE, SQUARE_SIZE, "white");
-    drawColoredSquare(context, apple_screen_coords.x + 1, apple_screen_coords.y + 1, SQUARE_SIZE, SQUARE_SIZE, "red");
+    drawColoredSquare(context, snake_screen_coords.x + 1, snake_screen_coords.y + 1, SQUARE_SIZE, "white");
+    drawColoredSquare(context, apple_screen_coords.x + 1, apple_screen_coords.y + 1, SQUARE_SIZE, "red");
 
     let snake_tail_head = snake.tail.getHead();
     while (snake_tail_head != null) {
         var tail_screen_coords = logicalCoordsToScreenCoords(snake_tail_head.data.x, snake_tail_head.data.y);
-        drawColoredSquare(context, tail_screen_coords.x + 1, tail_screen_coords.y + 1, SQUARE_SIZE, SQUARE_SIZE, "white");
+        drawColoredSquare(context, tail_screen_coords.x + 1, tail_screen_coords.y + 1, SQUARE_SIZE, "white");
         snake_tail_head = snake_tail_head.next;
     }
 }
