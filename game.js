@@ -184,7 +184,7 @@ function checkIfOppositeDirection(direction1, direction2) {
 function checkKey(e) {
     var code = e.keyCode;
     var last_direction = snake.direction;
-    if (game_state.snake_moved == true) {
+    if (game_state.snake_moved == true || game_state.state == GameStates.NOT_STARTED) {
         switch (code) {
             case 37: snake.direction = Direction.LEFT; break;
             case 38: snake.direction = Direction.UP; break;
