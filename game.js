@@ -133,6 +133,13 @@ function growSnake(snake) {
     snake.length++;
 }
 
+function openModal(message) {
+    let modal = document.getElementById("score-modal");
+    let inner_message = document.getElementById("score-modal-text");
+    inner_message.innerHTML = message;
+    modal.style.display = "block";
+}
+
 function doGame(context, board_array, snake, apple, game_state) {
     switch (game_state.state) {
         case GameStates.NOT_STARTED:
@@ -144,6 +151,14 @@ function doGame(context, board_array, snake, apple, game_state) {
                 growSnake(snake);
                 board_array[apple.location.x][apple.location.y] = ObjectTypes.SNAKE;
                 generateFood(context, board_array, apple);
+
+                game_state.score += 5;
+
+                if (snake.length % 25 == 0 && game_state.level < 5) {
+                    game_state.level++;
+                }
+
+                updateGui(game_state, snake);
             } else if (collision == Collisions.SNAKE || collision == Collisions.WALL) {
                 game_state.state = GameStates.OVER;
                 break;
@@ -160,10 +175,31 @@ function doGame(context, board_array, snake, apple, game_state) {
             resetBoard(context, board_array);
             generateSnakeStart(context, board_array, snake);
             generateFood(context, board_array, apple);
+
+            if (game_state.score > game_state.high_score) {
+                game_state.high_score = game_state.score;
+                openModal("Congratulations! You have reached a high score of: " + game_state.high_score + " points");
+            } else {
+                openModal("Too bad! The current high score is: " + game_state.high_score + " points");
+            }
+
             game_state.state = GameStates.NOT_STARTED;
+            game_state.score = 0;
+            game_state.level = 1;
+            updateGui(game_state, snake);
             break;
     }
-    setTimeout(doGame, 125, context, board_array, snake, apple, game_state);
+    setTimeout(doGame, 1000.0 / (game_state.level * 6.0), context, board_array, snake, apple, game_state);
+}
+
+function updateGui(state, snake) {
+    let length_text = document.getElementById("length-text");
+    let level_text = document.getElementById("level-text");
+    let score_text = document.getElementById("score-text");
+
+    length_text.innerHTML = length_text.innerHTML.substring(0, 8) + snake.length;
+    level_text.innerHTML = level_text.innerHTML.substring(0, 7) + state.level;
+    score_text.innerHTML = score_text.innerHTML.substring(0, 7) + state.score;
 }
 
 function checkIfOppositeDirection(direction1, direction2) {
@@ -342,6 +378,29 @@ var apple = {
     }
 }
 
+// Not a very efficient way to handle multiple modals, but
+// there are just two unique modals in the whole site.
+var score_modal = document.getElementById("score-modal");
+var welcome_modal = document.getElementById("welcome-modal");
+
+var close = document.getElementsByClassName("close");
+
+close[0].onclick = function() {
+    score_modal.style.display = "none";
+}
+
+close[1].onclick = function() {
+    welcome_modal.style.display = "none";
+}
+
+window.onclick = function(event) {
+    if (event.target == score_modal) {
+        score_modal.style.display = "none";
+    } else if (event.target == welcome_modal) {
+        welcome_modal.style.display = "none";
+    }
+}
+
 var game_canvas = document.getElementById("game-canvas");
 var game_context = game_canvas.getContext("2d");
 var canvas_width = game_canvas.width;
@@ -352,7 +411,13 @@ var logical_height = canvas_height / CELL_SIZE;
 
 var board = new Array(logical_height);
 
-var game_state = { state: GameStates.NOT_STARTED, snake_moved: false };
+var game_state = { 
+    state: GameStates.NOT_STARTED, 
+    snake_moved: false,
+    level: 1,
+    score: 0,
+    high_score: 0
+ };
 
 for (var i = 0; i < board.length; i++) {
     board[i] = new Array(logical_width);

@@ -4,11 +4,46 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <link rel="stylesheet" type="text/css" href="style.css?n=1">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Albert+Sans&display=swap" rel="stylesheet"> 
+        
+        <script src="game.js?n=2" defer></script>    
+
         <title>Snake</title>
     </head>
 
     <body>
-        <canvas id="game-canvas" width="500" height="500"></canvas>  
-        <script src="game.js?n=1"></script>      
+        <h1 class="game-text" style="font-size: 3em;">Snake!</h1>
+        <div id="game-div">
+            <canvas id="game-canvas" width="500" height="500"></canvas>  
+        </div>   
+        <div id="gui-div">
+                <span></span>
+                <span id="length-text">Length: 1</span>
+                <span id="level-text">Level: 1</span>
+                <span id="score-text">Score: 0</span>
+                <span></span>
+        </div>
+
+        <div class="modal" id="score-modal"> 
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <p id="score-modal-text"></p>
+            </div>
+        </div> 
+
+        <div class="modal" id="welcome-modal" style="display: block;"> 
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <p>Welcome to Snake!</p>
+                <p>Use the arrow keys to move.</p>
+                <p>Every 25 pieces of food your snake collects will increase the level and double the speed of the snake.</p>
+                <p>The maximum speed level is 5.</p>
+                <p>Good luck!</p>
+            </div>
+        </div> 
     </body>
 </html>
